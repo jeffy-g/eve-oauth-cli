@@ -1,0 +1,28 @@
+{
+  "name": "eve-oauth-cli",
+  "version": "1.5.27",
+  "description": "A CLI tool for managing EVE Online OAuth2 tokens, including generation, refresh, and revocation through interactive prompts.",
+  "module": "./index.mjs",
+  "bin": {
+    "eve-oauth": "./index.mjs"
+  },
+  "author": "jeffy-g <hirotom1107@gmail.com>",
+  "bugs": {
+    "url": "https://github.com/jeffy-g/eve-oauth-cli/issues"
+  },
+  "homepage": "https://github.com/jeffy-g/eve-oauth-cli#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jeffy-g/eve-oauth-cli.git"
+  },
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "@clack/prompts": "^1.0.0",
+    "colors.ts": "^1.0.20",
+    "electron": "^40.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "rm-cstyle-cmts": "^3.4.4",
+    "tin-args": "^0.1.3"
+  }
+}
