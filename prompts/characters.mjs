@@ -141,7 +141,7 @@ export async function caseCharacters(appRoot) {
   /** @type {true | void} */
   let resultValue = void 0;
   log("Please select task:");
-  do {
+  outer: do {
     const taskType = await p.select({
       message: "📝 Select response type, refresh token, or revoke token.",
       options: [...TASK_OPTIONs],
@@ -188,14 +188,14 @@ export async function caseCharacters(appRoot) {
         log(`OAuth token data is nothing.`.magenta);
         continue;
       }
-      const { options, payloads } = getCharactersSelection(
-        characters,
-        taskType === "view",
-      );
-      if (!options) {
-        continue;
-      }
       charSelection: do {
+        const { options, payloads } = getCharactersSelection(
+          characters,
+          taskType === "view",
+        );
+        if (!options) {
+          continue outer;
+        }
         const whichChar = await p.select({
           message: `Which EVE character to ${taskType.magenta} is entirely up to your mood!`,
           options,
@@ -208,16 +208,16 @@ export async function caseCharacters(appRoot) {
               const results = await runAll(sso, taskType, characters);
               spin.stop("Done");
               let msg = `Processing all EVE characters: ${taskType}`,
-                post;
+                suffix;
               if (!results.length) {
-                post = " was unnecessary.".hex("555555");
+                suffix = " was unnecessary.".hex("555555");
               } else if (results.every((v) => v === true)) {
-                post = " succeeded.".green;
+                suffix = " succeeded.".green;
                 resultValue = true;
               } else {
-                post = " failed.".red;
+                suffix = " failed.".red;
               }
-              log(msg + post);
+              log(msg + suffix);
             }
           } else {
             const cid = whichChar.split(":")[2];

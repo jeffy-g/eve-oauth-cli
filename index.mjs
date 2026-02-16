@@ -97,7 +97,7 @@ async function handleCredential() {
 async function main() {
   await storage.load(typeof params.p === "number" ? "" + params.p : params.p);
   console.clear();
-  log("Welcome to EVE OAuth2 CLI Tool");
+  log(`Welcome to EVE OAuth2 CLI Tool - ${version.magenta}`.gray_bg(4).yellow);
   /**
    * + EVE OAuth token data (characters)
    * @type {TEVEOAuthRecord=}
@@ -157,5 +157,5 @@ async function main() {
   await storage.save();
   process.exit(0);
 }
-export const version = "v1.5.27";
+export const version = "v1.5.28";
 main().catch(console.error);
