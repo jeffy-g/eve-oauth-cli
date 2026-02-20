@@ -16,6 +16,7 @@ import { caseImplicitFlow } from "./token.mjs";
 import { casePKCE } from "./code.mjs";
 import * as jwtTool from "../lib/validate-jwt.mjs";
 const log = utils.getLogger("characters");
+const packageRoot = utils.resolveThisPackageRoot();
 /**
  * @param {number} expires
  */
@@ -28,15 +29,15 @@ const TASK_OPTIONs = [
     hint: "Refresh your OAuth2 token to ensure uninterrupted access.".green,
   },
   {
+    value: "view",
+    label: "❓ View JWT Payload",
+    hint: "View and analyze the JWT Payload".blue,
+  },
+  {
     value: "code",
     label: "🔏 Obtain OAuth2 Token via PKCE",
     hint: "You will receive a refreshable access token that is valid for 20 minutes."
       .green,
-  },
-  {
-    value: "view",
-    label: "❓ View JWT Payload",
-    hint: "View and analyze the JWT Payload".blue,
   },
   {
     value: "token",
@@ -76,7 +77,7 @@ function cutToken(token) {
  * @returns {string}
  */
 function tokenToTemplateString(token) {
-  return `\`${cutToken(token).join("\\\n")}\`;`;
+  return `"${cutToken(token).join("\\\n")}";`;
 }
 /**
  * @param {TEVEOAuthRecord} characters
@@ -163,7 +164,9 @@ export async function caseCharacters(appRoot) {
         utils.createUUID(),
       );
       log(url);
-      const proc = utils.runCommand(`electron ./electron.mjs "${url}"`);
+      const proc = utils.runCommand(
+        `electron ${packageRoot}/electron.mjs "${url}"`,
+      );
       proc.on("exit", (code, sig) => {});
       proc.stdout?.pipe(process.stdout);
       log("ℹ️  Proceeding to the next step.");
@@ -241,11 +244,12 @@ export async function caseCharacters(appRoot) {
                 ],
                 jwt,
               );
+              const wrappedToken = tokenToTemplateString(chToken);
               /** @type {string} */
               let msg;
               if (ok) {
                 utils.copyText(
-                  chToken,
+                  wrappedToken,
                   "accessToken copied to clipboard!".green.bold + "\n",
                 );
                 msg = "valid".green;
@@ -253,7 +257,7 @@ export async function caseCharacters(appRoot) {
                 msg = "expired".yellow;
               }
               log(
-                `"${payload.name.magenta}" accessToken(${msg}):\n${ok ? (chToken.slice(0, 120) + "...").cyan : tokenToTemplateString(chToken).gray(12)}`,
+                `"${payload.name.magenta}" accessToken(${msg}):\n${ok ? (chToken.slice(0, 120) + "...").cyan : wrappedToken.gray(12)}`,
               );
               continue;
             }

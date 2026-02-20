@@ -1,6 +1,6 @@
 {
   "name": "eve-oauth-cli",
-  "version": "1.5.28",
+  "version": "1.5.30",
   "description": "A CLI tool for managing EVE Online OAuth2 tokens, including generation, refresh, and revocation through interactive prompts.",
   "module": "./index.mjs",
   "bin": {

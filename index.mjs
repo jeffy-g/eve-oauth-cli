@@ -157,5 +157,5 @@ async function main() {
   await storage.save();
   process.exit(0);
 }
-export const version = "v1.5.28";
+export const version = "v1.5.30";
 main().catch(console.error);
